@@ -1,0 +1,89 @@
+{
+  "name": "ftpcashless",
+  "type": "ANY-GCC",
+  "dependenceList": [],
+  "srcDirs": [
+    "src"
+  ],
+  "virtualFolder": {
+    "name": "<virtual_root>",
+    "files": [],
+    "folders": []
+  },
+  "outDir": "build",
+  "deviceName": null,
+  "packDir": null,
+  "miscInfo": {
+    "uid": "7ad08aabcc0b44c74fc52b164c86f0a5"
+  },
+  "targets": {
+    "Debug": {
+      "excludeList": [],
+      "toolchain": "ANY_GCC",
+      "compileConfig": {
+        "linkerScriptPath": "",
+        "options": "null"
+      },
+      "uploader": "JLink",
+      "uploadConfig": {
+        "bin": "",
+        "baseAddr": "",
+        "cpuInfo": {
+          "vendor": "null",
+          "cpuName": "null"
+        },
+        "proType": 1,
+        "speed": 8000,
+        "otherCmds": ""
+      },
+      "uploadConfigMap": {},
+      "custom_dep": {
+        "name": "default",
+        "incList": [],
+        "libList": [],
+        "defineList": [
+          "DEBUG=1"
+        ]
+      },
+      "builderOptions": {
+        "ANY_GCC": {
+          "version": 1,
+          "beforeBuildTasks": [],
+          "afterBuildTasks": [
+            {
+              "name": "make hex",
+              "disable": false,
+              "abortAfterFailed": false,
+              "command": "\"${CompilerFolder}/${CompilerPrefix}objcopy\" -O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures \"${OutDir}/${TargetName}.elf\" \"${OutDir}/${TargetName}.hex\""
+            },
+            {
+              "name": "make eeprom",
+              "disable": false,
+              "abortAfterFailed": false,
+              "command": "\"${CompilerFolder}/${CompilerPrefix}objcopy\" -j .eeprom  --set-section-flags=.eeprom=alloc,load --change-section-lma .eeprom=0  --no-change-warnings -O ihex \"${OutDir}/${TargetName}.elf\" \"${OutDir}/${TargetName}.eep\" || exit 0"
+            }
+          ],
+          "global": {
+            "misc-control": "-mmcu=atmega2560"
+          },
+          "c/cpp-compiler": {
+            "one-elf-section-per-function": true,
+            "one-elf-section-per-data": true,
+            "C_FLAGS": "-x c -funsigned-char -funsigned-bitfields -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g2 -Wall -c -std=gnu99 -MD -MP",
+            "CXX_FLAGS": "-c -xc++"
+          },
+          "asm-compiler": {
+            "ASM_FLAGS": "-c"
+          },
+          "linker": {
+            "output-format": "elf",
+            "remove-unused-input-sections": true,
+            "linker-type": "gcc",
+            "LD_FLAGS": "-Wl,-Map=\"${OutDir}/${TargetName}.map\" -Wl,--start-group -Wl,-lm -Wl,--end-group -Wl,--gc-sections"
+          }
+        }
+      }
+    }
+  },
+  "version": "3.5"
+}
